@@ -756,8 +756,9 @@ body.va-annotating, body.va-annotating * { cursor: crosshair !important; }
     });
 
     popup.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) { submitAnnotation(el, existing); e.preventDefault(); }
       if (e.key === "Escape") { closePopup(); e.stopPropagation(); }
-      e.stopPropagation(); // Don't trigger annotate-mode keydowns
+      e.stopPropagation();
     });
 
     // Position popup near element
