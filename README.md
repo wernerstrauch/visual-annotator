@@ -69,9 +69,10 @@ To update after pulling new changes:
 
 1. **Toggle toolbar** — Click the extension icon or press `Cmd+Shift+.` (Mac) / `Ctrl+Shift+.` (Windows/Linux)
 2. **Annotate** — Click the pen icon (or press `A`), then click any element on the page
-3. **Comment** — Add a description, select intent (Fix/Change/Question/Approve) and severity (Blocking/Important/Suggestion)
-4. **Screenshot** — Capture a cropped screenshot of the element directly in the annotation popup
-5. **Copy** — Click the copy icon to get all annotations as structured markdown in your clipboard
+3. **Comment** — Optionally add a description, select intent and severity
+4. **Intent** — Choose Fix, Change, Question, Approve, or **Copy** (to grab the element's HTML DOM)
+5. **Screenshot** — Capture a cropped screenshot of the element directly in the annotation popup
+6. **Copy** — Click the copy icon to get all annotations as structured markdown in your clipboard
 6. **Console** — Click the terminal icon to copy all captured console logs as markdown
 7. **Paste** — Into any AI agent prompt
 
@@ -84,6 +85,7 @@ Click the extension icon to open the popup with these options:
 | Show/Hide Toolbar | Toggle the annotation toolbar on the current page |
 | Always On | Automatically show the toolbar on every page |
 | Auto Copy | Automatically copy markdown to clipboard after each annotation |
+| Auto Screenshot | Automatically capture a screenshot with each annotation |
 
 ## Toolbar Buttons
 
@@ -104,6 +106,27 @@ When annotation mode is active:
 - **Click** to select an element and open the comment popup
 - **Click a numbered marker** to edit an existing annotation
 - **Escape** to exit annotation mode
+
+## Copy Intent
+
+The **Copy** intent lets you grab the full HTML DOM of any element on the page. This is useful when you want an AI agent to understand the exact markup structure — for example to replicate a component, refactor HTML, or debug rendering issues.
+
+When you select "Copy" as the intent, a checkbox appears: **Include full HTML DOM of element** (checked by default). The complete `outerHTML` of the selected element is then included in the markdown output as a fenced code block.
+
+```markdown
+## 1. `div.card` [copy · important]
+
+- **Comment:** Replicate this card component
+- **HTML:**
+```html
+<div class="card">
+  <h2>Title</h2>
+  <p>Content with <a href="#">links</a></p>
+</div>
+```
+
+---
+```
 
 ## Markdown Output
 
