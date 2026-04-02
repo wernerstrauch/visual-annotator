@@ -672,6 +672,7 @@ body.va-annotating, body.va-annotating * { cursor: crosshair !important; }
             <button class="chip ${intent === "change" ? "sel" : ""}" data-v="change">Change</button>
             <button class="chip ${intent === "question" ? "sel" : ""}" data-v="question">Question</button>
             <button class="chip ${intent === "approve" ? "sel" : ""}" data-v="approve">Approve</button>
+            <button class="chip ${intent === "copy" ? "sel" : ""}" data-v="copy">Copy</button>
           </div>
         </div>
         <div style="flex:1">
@@ -682,6 +683,12 @@ body.va-annotating, body.va-annotating * { cursor: crosshair !important; }
             <button class="chip suggestion ${severity === "suggestion" ? "sel" : ""}" data-v="suggestion">Suggestion</button>
           </div>
         </div>
+      </div>
+      <div id="copy-options" style="display:${intent === "copy" ? "block" : "none"};margin-bottom:10px;">
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);cursor:pointer;">
+          <input type="checkbox" id="include-html" ${existing ? (existing.includeHtml ? "checked" : "") : "checked"} style="accent-color:var(--accent);">
+          Include full HTML DOM of element
+        </label>
       </div>
       <div class="screenshot-row" id="ss-slot"></div>
       <textarea id="comment" placeholder="Describe the issue or desired change...">${esc(comment)}</textarea>
@@ -746,6 +753,7 @@ body.va-annotating, body.va-annotating * { cursor: crosshair !important; }
       if (!chip) return;
       q("#intents").querySelectorAll(".chip").forEach((c) => c.classList.remove("sel"));
       chip.classList.add("sel");
+      q("#copy-options").style.display = chip.dataset.v === "copy" ? "block" : "none";
     });
 
     q("#severities").addEventListener("click", (e) => {
@@ -786,14 +794,10 @@ body.va-annotating, body.va-annotating * { cursor: crosshair !important; }
     const comment = shadow.querySelector("#comment").value.trim();
     const intent = shadow.querySelector("#intents .chip.sel")?.dataset.v || "fix";
     const severity = shadow.querySelector("#severities .chip.sel")?.dataset.v || "important";
+    const includeHtml = intent === "copy" && !!shadow.querySelector("#include-html")?.checked;
     lastIntent = intent;
     lastSeverity = severity;
 
-    if (!comment) {
-      shadow.querySelector("#comment").style.borderColor = "#ef4444";
-      shadow.querySelector("#comment").focus();
-      return;
-    }
 
     const rect = el.getBoundingClientRect();
 
@@ -803,6 +807,8 @@ body.va-annotating, body.va-annotating * { cursor: crosshair !important; }
       existing.severity = severity;
       existing.screenshot = currentScreenshot;
       existing.screenshotPath = currentScreenshotPath;
+      existing.includeHtml = includeHtml;
+      existing.html = includeHtml ? el.outerHTML : null;
     } else {
       annotations.push({
         id: nextId++,
@@ -822,6 +828,8 @@ body.va-annotating, body.va-annotating * { cursor: crosshair !important; }
         comment, intent, severity,
         screenshot: currentScreenshot,
         screenshotPath: currentScreenshotPath,
+        includeHtml: includeHtml,
+        html: includeHtml ? el.outerHTML : null,
         keyStyles: getKeyStyles(el),
       });
     }
@@ -1019,6 +1027,7 @@ body.va-annotating, body.va-annotating * { cursor: crosshair !important; }
       }
       if (a.screenshotPath) md += `- **Screenshot:** ![screenshot-${i + 1}](${a.screenshotPath})\n`;
       else if (a.screenshot) md += `- **Screenshot:** [image attached]\n`;
+      if (a.html) md += `- **HTML:**\n\`\`\`html\n${a.html}\n\`\`\`\n`;
       md += `\n---\n\n`;
     });
 
