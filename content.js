@@ -830,6 +830,7 @@ body.va-annotating, body.va-annotating * { cursor: crosshair !important; }
         screenshotPath: currentScreenshotPath,
         includeHtml: includeHtml,
         html: includeHtml ? el.outerHTML : null,
+        shopifySection: detectShopifySection(el),
         keyStyles: getKeyStyles(el),
       });
     }
@@ -867,6 +868,25 @@ body.va-annotating, body.va-annotating * { cursor: crosshair !important; }
   }
   window.addEventListener("scroll", scheduleSyncMarkers, true);
   window.addEventListener("resize", scheduleSyncMarkers);
+
+  // ─── Shopify Section Detection ───────────────────────────────────────
+
+  function detectShopifySection(el) {
+    let cur = el;
+    while (cur && cur !== document.documentElement) {
+      if (cur.classList?.contains("shopify-section")) {
+        const sectionClass = Array.from(cur.classList).find((c) => c.startsWith("shopify-section--"));
+        const sectionName = sectionClass ? sectionClass.replace("shopify-section--", "") : null;
+        return {
+          id: cur.id || null,
+          name: sectionName,
+          file: sectionName ? `sections/${sectionName}.liquid` : null,
+        };
+      }
+      cur = cur.parentElement;
+    }
+    return null;
+  }
 
   // ─── Selector Generation ────────────────────────────────────────────
 
@@ -1016,7 +1036,8 @@ body.va-annotating, body.va-annotating * { cursor: crosshair !important; }
     annotations.forEach((a, i) => {
       const label = a.idAttr ? `#${a.idAttr}` : `${a.tag}${a.classes[0] ? "." + a.classes[0] : ""}`;
       md += `## ${i + 1}. \`${label}\` [${a.intent} · ${a.severity}]\n\n`;
-      md += `- **Comment:** ${a.comment}\n`;
+      if (a.comment) md += `- **Comment:** ${a.comment}\n`;
+      if (a.shopifySection?.file) md += `- **Shopify Section:** \`${a.shopifySection.file}\`\n`;
       if (a.url) md += `- **URL:** ${a.url}\n`;
       md += `- **Element:** \`<${a.tag}${a.idAttr ? ` id="${a.idAttr}"` : ""}${a.classes.length ? ` class="${a.classes.join(" ")}"` : ""}>\`\n`;
       md += `- **Selector:** \`${a.selector}\`\n`;
