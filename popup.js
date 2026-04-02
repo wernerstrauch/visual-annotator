@@ -54,7 +54,8 @@ toggleBtn.addEventListener("click", async () => {
     await new Promise((r) => setTimeout(r, 150));
   }
 
-  await chrome.tabs.sendMessage(currentTab.id, { type: "TOGGLE_TOOLBAR" });
+  const action = toolbarVisible ? "HIDE_TOOLBAR" : "SHOW_TOOLBAR";
+  await chrome.tabs.sendMessage(currentTab.id, { type: action });
   toolbarVisible = !toolbarVisible;
   updateToggleBtn();
 });

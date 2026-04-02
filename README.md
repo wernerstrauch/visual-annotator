@@ -146,10 +146,12 @@ All shortcuts only work when the toolbar is visible and no text input is focused
 
 | Shortcut | Action |
 |----------|--------|
-| `Cmd/Ctrl+Shift+.` | Toggle toolbar (global, works anywhere) |
+| `Cmd/Ctrl+Shift+.` | Open toolbar + start annotating |
 | `A` | Toggle annotate mode |
 | `X` | Clear all annotations |
 | `Escape` | Exit annotate mode or close popup |
+
+> **Tip:** By default the shortcut only works when Chrome is focused. To make it work globally (from any app), go to `chrome://extensions/shortcuts`, find **Visual Annotator** and change the scope from "In Chrome" to "Global".
 
 ## Screenshots
 

@@ -327,6 +327,8 @@ body.va-annotating, body.va-annotating * { cursor: crosshair !important; }
 
   chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
     if (msg.type === "TOGGLE_TOOLBAR") toggleToolbar();
+    if (msg.type === "SHOW_TOOLBAR") { if (!toolbarVisible) showToolbar(); }
+    if (msg.type === "HIDE_TOOLBAR") hideToolbar();
     if (msg.type === "PING") sendResponse("PONG");
     if (msg.type === "GET_STATE") sendResponse({ toolbarVisible });
   });
@@ -334,7 +336,8 @@ body.va-annotating, body.va-annotating * { cursor: crosshair !important; }
   // ─── Toolbar ─────────────────────────────────────────────────────────
 
   function toggleToolbar() {
-    toolbarVisible ? hideToolbar() : showToolbar();
+    if (!toolbarVisible) showToolbar();
+    if (!isAnnotating) toggleAnnotateMode();
   }
 
   function showToolbar() {
@@ -893,7 +896,15 @@ body.va-annotating, body.va-annotating * { cursor: crosshair !important; }
 
   // ─── Screenshot ──────────────────────────────────────────────────────
 
+  function isContextValid() {
+    try { return !!chrome.runtime?.id; } catch { return false; }
+  }
+
   async function captureScreenshot(el) {
+    if (!isContextValid()) {
+      alert("Visual Annotator was updated. Please reload the page.");
+      return null;
+    }
     try {
       if (highlightEl) highlightEl.style.display = "none";
       if (tooltipEl) tooltipEl.style.display = "none";
@@ -944,6 +955,7 @@ body.va-annotating, body.va-annotating * { cursor: crosshair !important; }
   // ─── Save Screenshot File ────────────────────────────────────────────
 
   function saveScreenshotFile(dataUrl) {
+    if (!isContextValid()) return Promise.resolve(null);
     const loc = window.location;
     const isLocalhost = /^localhost$|^127\.|^\[::1\]/.test(loc.hostname);
     let slug;
