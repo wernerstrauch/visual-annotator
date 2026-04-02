@@ -8,16 +8,28 @@ Annotate elements, capture screenshots, copy browser console logs, and paste eve
 
 ### Works with
 
+**Markdown + Screenshots** — agents with local file system access can read the saved screenshot files directly:
+
 | Agent | How |
 |-------|-----|
-| **Claude Code** | Paste markdown + screenshot paths directly into the CLI prompt |
-| **Cursor** | Paste into chat or Cmd+K inline edit |
-| **GitHub Copilot** | Paste into Copilot Chat in VS Code |
-| **ChatGPT / OpenAI Codex** | Paste into conversation or API prompt |
-| **Windsurf** | Paste into Cascade chat |
-| **Pi / Inflection** | Paste into conversation |
-| **Cline** | Paste into chat panel in VS Code |
-| **Aider** | Paste into CLI prompt |
+| **[Claude Code CLI](https://code.claude.com/docs/en/quickstart)** | Paste markdown + screenshot paths into the CLI prompt |
+| **[Claude Code VS Code](https://marketplace.visualstudio.com/items?itemName=anthropic.claude-code)** | Paste into Claude Code chat panel |
+| **[Cursor](https://cursor.com)** | Paste into chat or Cmd+K inline edit |
+| **[Windsurf](https://windsurf.com)** | Paste into Cascade chat |
+| **[Cline](https://cline.bot)** | Paste into chat panel in VS Code |
+| **[Aider](https://github.com/Aider-AI/aider)** | Paste into CLI prompt |
+| **[GitHub Copilot](https://github.com/features/copilot)** | Paste into Copilot Chat in VS Code |
+| **[Pi](https://github.com/badlogic/pi-mono)** | Paste into CLI prompt |
+| **[OpenCode](https://github.com/anomalyco/opencode)** | Paste into CLI prompt |
+| **[Gemini CLI](https://geminicli.com)** | Paste into CLI prompt |
+| **[Google Antigravity](https://antigravity.google)** | Paste into conversation |
+
+**Markdown only** — web-based agents without file system access get the full structured markdown (selectors, styles, bounding boxes), but cannot load the screenshot files:
+
+| Agent | How |
+|-------|-----|
+| **ChatGPT** | Paste into conversation |
+| **[Gemini](https://gemini.google.com)** | Paste into conversation |
 | Any other agent | If it reads markdown, it works |
 
 No backend. No framework dependency. Works on every website.

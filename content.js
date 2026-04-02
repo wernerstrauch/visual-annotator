@@ -38,6 +38,7 @@
   let toolbarVisible = false;
   let isAnnotating = false;
   let autoCopyEnabled = false;
+  let autoScreenshotEnabled = false;
   let lastIntent = "fix";
   let lastSeverity = "important";
   let annotations = [];
@@ -716,6 +717,20 @@ body.va-annotating, body.va-annotating * { cursor: crosshair !important; }
     }
     renderScreenshotSlot();
 
+    // Auto screenshot
+    if (autoScreenshotEnabled && !currentScreenshot) {
+      (async () => {
+        popupHost.style.visibility = "hidden";
+        const dataUrl = await captureScreenshot(el);
+        popupHost.style.visibility = "";
+        if (dataUrl) {
+          currentScreenshot = dataUrl;
+          currentScreenshotPath = await saveScreenshotFile(dataUrl);
+          renderScreenshotSlot();
+        }
+      })();
+    }
+
     // Wire events
     q("#close").addEventListener("click", closePopup);
     q("#cancel").addEventListener("click", closePopup);
@@ -1101,14 +1116,16 @@ body.va-annotating, body.va-annotating * { cursor: crosshair !important; }
 
   // ─── Settings ────────────────────────────────────────────────────────
 
-  chrome.storage.local.get(["alwaysOn", "autoCopy"], (result) => {
+  chrome.storage.local.get(["alwaysOn", "autoCopy", "autoScreenshot"], (result) => {
     if (result.alwaysOn) showToolbar();
     autoCopyEnabled = !!result.autoCopy;
+    autoScreenshotEnabled = !!result.autoScreenshot;
   });
 
   chrome.storage.onChanged.addListener((changes) => {
     if (changes.alwaysOn && changes.alwaysOn.newValue && !toolbarVisible) showToolbar();
     if (changes.autoCopy) autoCopyEnabled = !!changes.autoCopy.newValue;
+    if (changes.autoScreenshot) autoScreenshotEnabled = !!changes.autoScreenshot.newValue;
   });
 
 })();

@@ -1,6 +1,7 @@
 const toggleBtn = document.getElementById("toggle-toolbar");
 const alwaysOnCb = document.getElementById("always-on");
 const autoCopyCb = document.getElementById("auto-copy");
+const autoScreenshotCb = document.getElementById("auto-screenshot");
 const restrictedMsg = document.getElementById("restricted");
 
 let currentTab = null;
@@ -20,9 +21,10 @@ async function init() {
   currentTab = tab;
 
   // Load settings
-  const settings = await chrome.storage.local.get(["alwaysOn", "autoCopy"]);
+  const settings = await chrome.storage.local.get(["alwaysOn", "autoCopy", "autoScreenshot"]);
   alwaysOnCb.checked = !!settings.alwaysOn;
   autoCopyCb.checked = !!settings.autoCopy;
+  autoScreenshotCb.checked = !!settings.autoScreenshot;
 
   if (isRestricted(tab?.url)) {
     toggleBtn.style.display = "none";
@@ -66,6 +68,10 @@ alwaysOnCb.addEventListener("change", () => {
 
 autoCopyCb.addEventListener("change", () => {
   chrome.storage.local.set({ autoCopy: autoCopyCb.checked });
+});
+
+autoScreenshotCb.addEventListener("change", () => {
+  chrome.storage.local.set({ autoScreenshot: autoScreenshotCb.checked });
 });
 
 init();
