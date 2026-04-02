@@ -24,7 +24,7 @@ No backend. No framework dependency. Works on every website.
 
 ## Demo
 
-https://github.com/wernerstrauch/visual-annotator/raw/main/demo.mp4
+https://github.com/user-attachments/assets/c954c6cb-d978-4980-a194-51a8702903c3
 
 ## Install
 
