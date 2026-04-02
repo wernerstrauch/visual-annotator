@@ -22,6 +22,10 @@ Annotate elements, capture screenshots, copy browser console logs, and paste eve
 
 No backend. No framework dependency. Works on every website.
 
+## Demo
+
+https://github.com/wernerstrauch/visual-annotator/raw/main/demo.mp4
+
 ## Install
 
 ### Mac
